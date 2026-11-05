@@ -1,0 +1,24 @@
+name: tests
+
+# Runs the automatic tests on every push. They need no Ollama, no Whisper and no internet:
+# the slow parts are replaced by small fakes inside the tests.
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04          # a fixed version, so a new "ubuntu-latest" can never break the tests by surprise
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.12", "3.14"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Install the packages
+        run: pip install -r requirements.txt pytest
+      - name: Run the tests
+        run: python -m pytest -q
