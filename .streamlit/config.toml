@@ -1,0 +1,9 @@
+# Settings of the web app (streamlit run app.py). Streamlit reads this file from the folder you start it in.
+
+[server]
+# Without this line the very first start waits for an e-mail address and looks as if it were stuck.
+showEmailPrompt = false
+
+[browser]
+# No usage statistics are sent.
+gatherUsageStats = false
