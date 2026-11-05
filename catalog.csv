@@ -1,0 +1,83 @@
+video_id,unit,sequence,video_no,title,archive_file,size_mb,selected,check_regex
+2.2-V1,Unit 2: Linear Regression,2.2 The Statistical Sommelier: An Introduction to Linear Regression,1,Predicting the Quality of Wine,MIT15_071S17_Session_2.2.01_300k.mp4,8.9,0,
+2.2-V2,Unit 2: Linear Regression,2.2 The Statistical Sommelier: An Introduction to Linear Regression,2,One-Variable Linear Regression,MIT15_071S17_Session_2.2.03_300k.mp4,9.6,1,squared errors|temperature|baseline
+2.2-V3,Unit 2: Linear Regression,2.2 The Statistical Sommelier: An Introduction to Linear Regression,3,Multiple Linear Regression,MIT15_071S17_Session_2.2.05_300k.mp4,4.7,1,multiple|adjusted|harvest|rain
+2.2-V4,Unit 2: Linear Regression,2.2 The Statistical Sommelier: An Introduction to Linear Regression,4,Linear Regression in R,MIT15_071S17_Session_2.2.07_300k.mp4,18.1,0,
+2.2-V5,Unit 2: Linear Regression,2.2 The Statistical Sommelier: An Introduction to Linear Regression,5,Understanding the Model,MIT15_071S17_Session_2.2.09_300k.mp4,26.7,1,adjusted|coefficient|significan|standard error|r.?squared
+2.2-V6,Unit 2: Linear Regression,2.2 The Statistical Sommelier: An Introduction to Linear Regression,6,Correlation and Multicollinearity,MIT15_071S17_Session_2.2.11_300k.mp4,15.5,1,correlation|multicollinear
+2.2-V7,Unit 2: Linear Regression,2.2 The Statistical Sommelier: An Introduction to Linear Regression,7,Making Predictions,MIT15_071S17_Session_2.2.13_300k.mp4,11.2,1,test set|out.of.sample|predict
+2.2-V8,Unit 2: Linear Regression,2.2 The Statistical Sommelier: An Introduction to Linear Regression,8,Comparing the Model to the Experts,MIT15_071S17_Session_2.2.15_300k.mp4,3.9,0,
+2.3-V1,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,1,The Story of Moneyball,MIT15_071S17_Session_2.3.02_300k.mp4,16.0,0,
+2.3-V2,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,2,Making it to the Playoffs,MIT15_071S17_Session_2.3.03_300k.mp4,11.9,1,playoff|wins|run difference
+2.3-V3,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,3,Predicting Runs,MIT15_071S17_Session_2.3.05_300k.mp4,10.1,1,on.base|slugging|batting average|runs
+2.3-V4,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,4,Using the Models to Make Predictions,MIT15_071S17_Session_2.3.07_300k.mp4,5.5,0,
+2.3-V5,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,5,Winning the World Series,MIT15_071S17_Session_2.3.09_300k.mp4,2.9,1,world series|playoff|lottery|luck
+2.3-V6,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,6,The Analytics Edge in Sports,MIT15_071S17_Session_2.3.11_300k.mp4,10.2,0,
+2.4-V1,Unit 2: Linear Regression,2.4 Playing Moneyball in the NBA (Recitation),1,The Data,MIT15_071S17_Session_2.4.02_300k.mp4,9.5,0,
+2.4-V2,Unit 2: Linear Regression,2.4 Playing Moneyball in the NBA (Recitation),2,Playoffs and Wins,MIT15_071S17_Session_2.4.03_300k.mp4,15.0,0,
+2.4-V3,Unit 2: Linear Regression,2.4 Playing Moneyball in the NBA (Recitation),3,Points Scored,MIT15_071S17_Session_2.4.04_300k.mp4,18.7,0,
+2.4-V4,Unit 2: Linear Regression,2.4 Playing Moneyball in the NBA (Recitation),4,Making Predictions,MIT15_071S17_Session_2.4.05_300k.mp4,6.2,0,
+3.2-V1,Unit 3: Logistic Regression,3.2 Modeling the Expert: An Introduction to Logistic Regression,1,Replicating Expert Assessment,MIT15_071S17_Session_3.2.01_300k.mp4,7.5,1,claims|expert|quality|poor care
+3.2-V2,Unit 3: Logistic Regression,3.2 Modeling the Expert: An Introduction to Logistic Regression,2,Building the Dataset,MIT15_071S17_Session_3.2.02_300k.mp4,8.8,0,
+3.2-V3,Unit 3: Logistic Regression,3.2 Modeling the Expert: An Introduction to Logistic Regression,3,Logistic Regression,MIT15_071S17_Session_3.2.04_300k.mp4,7.0,1,logistic|odds|logit|probabilit
+3.2-V4,Unit 3: Logistic Regression,3.2 Modeling the Expert: An Introduction to Logistic Regression,4,Logistic Regression in R,MIT15_071S17_Session_3.2.06_300k.mp4,25.6,0,
+3.2-V5,Unit 3: Logistic Regression,3.2 Modeling the Expert: An Introduction to Logistic Regression,5,Thresholding,MIT15_071S17_Session_3.2.08_300k.mp4,17.1,1,threshold|sensitivity|specificity|confusion
+3.2-V6,Unit 3: Logistic Regression,3.2 Modeling the Expert: An Introduction to Logistic Regression,6,ROC Curves,MIT15_071S17_Session_3.2.10_300k.mp4,17.1,1,roc|receiver|area under|auc
+3.2-V7,Unit 3: Logistic Regression,3.2 Modeling the Expert: An Introduction to Logistic Regression,7,Interpreting the Model,MIT15_071S17_Session_3.2.12_300k.mp4,17.8,1,coefficient|multicollinear|auc|predict
+3.2-V8,Unit 3: Logistic Regression,3.2 Modeling the Expert: An Introduction to Logistic Regression,8,The Analytics Edge,MIT15_071S17_Session_3.2.14_300k.mp4,5.1,0,
+3.3-V1,Unit 3: Logistic Regression,3.3 The Framingham Heart Study: Evaluating Risk Factors to Save Lives,1,The Framingham Heart Study,MIT15_071S17_Session_3.3.01_300k.mp4,8.3,0,
+3.3-V2,Unit 3: Logistic Regression,3.3 The Framingham Heart Study: Evaluating Risk Factors to Save Lives,2,Risk Factors,MIT15_071S17_Session_3.3.03_300k.mp4,7.5,1,risk factor|cholesterol|blood pressure|smok
+3.3-V3,Unit 3: Logistic Regression,3.3 The Framingham Heart Study: Evaluating Risk Factors to Save Lives,3,A Logistic Regression Model,MIT15_071S17_Session_3.3.05_300k.mp4,22.2,1,training|testing|split|logistic|glm
+3.3-V4,Unit 3: Logistic Regression,3.3 The Framingham Heart Study: Evaluating Risk Factors to Save Lives,4,Validating the Model,MIT15_071S17_Session_3.3.07_300k.mp4,5.0,1,validat|internal|external|population
+3.3-V5,Unit 3: Logistic Regression,3.3 The Framingham Heart Study: Evaluating Risk Factors to Save Lives,5,Interventions,MIT15_071S17_Session_3.3.09_300k.mp4,3.9,0,
+3.3-V6,Unit 3: Logistic Regression,3.3 The Framingham Heart Study: Evaluating Risk Factors to Save Lives,6,Overall Impact,MIT15_071S17_Session_3.3.11_300k.mp4,9.0,0,
+3.4-V1,Unit 3: Logistic Regression,3.4 Election Forecasting: Predicting the Winner Before any Votes are Cast (Recitation),1,Election Prediction,MIT15_071S17_Session_3.4.02_300k.mp4,9.8,0,
+3.4-V2,Unit 3: Logistic Regression,3.4 Election Forecasting: Predicting the Winner Before any Votes are Cast (Recitation),2,Dealing with Missing Data,MIT15_071S17_Session_3.4.03_300k.mp4,15.4,1,missing|imputation|mice
+3.4-V3,Unit 3: Logistic Regression,3.4 Election Forecasting: Predicting the Winner Before any Votes are Cast (Recitation),3,A Sophisticated Baseline Method,MIT15_071S17_Session_3.4.04_300k.mp4,12.7,1,baseline|poll|smart
+3.4-V4,Unit 3: Logistic Regression,3.4 Election Forecasting: Predicting the Winner Before any Votes are Cast (Recitation),4,Logistic Regression Models,MIT15_071S17_Session_3.4.05_300k.mp4,17.3,0,
+3.4-V5,Unit 3: Logistic Regression,3.4 Election Forecasting: Predicting the Winner Before any Votes are Cast (Recitation),5,Test Set Predictions,MIT15_071S17_Session_3.4.06_300k.mp4,9.8,0,
+4.2-V1,Unit 4: Trees,"4.2 Judge, Jury, and Classifier: An Introduction to Trees",1,The Supreme Court,MIT15_071S17_Session_4.2.01_300k.mp4,12.6,0,
+4.2-V2,Unit 4: Trees,"4.2 Judge, Jury, and Classifier: An Introduction to Trees",2,CART,MIT15_071S17_Session_4.2.03_300k.mp4,12.6,1,cart|tree|split|classification
+4.2-V3,Unit 4: Trees,"4.2 Judge, Jury, and Classifier: An Introduction to Trees",3,Splitting and Predictions,MIT15_071S17_Session_4.2.05_300k.mp4,5.2,1,minbucket|split|bucket|prediction
+4.2-V4,Unit 4: Trees,"4.2 Judge, Jury, and Classifier: An Introduction to Trees",4,CART in R,MIT15_071S17_Session_4.2.07_300k.mp4,27.2,0,
+4.2-V5,Unit 4: Trees,"4.2 Judge, Jury, and Classifier: An Introduction to Trees",5,Random Forests,MIT15_071S17_Session_4.2.09_300k.mp4,16.5,1,random forest|forest|bagging|trees
+4.2-V6,Unit 4: Trees,"4.2 Judge, Jury, and Classifier: An Introduction to Trees",6,Cross-Validation,MIT15_071S17_Session_4.2.11_300k.mp4,23.3,1,cross.validation|fold|cp|complexity
+4.2-V7,Unit 4: Trees,"4.2 Judge, Jury, and Classifier: An Introduction to Trees",7,The Model v. The Experts,MIT15_071S17_Session_4.2.13_300k.mp4,11.5,0,
+4.3-V1,Unit 4: Trees,4.3 Keeping an Eye on Healthcare Costs: The D2Hawkeye Story,1,The Story of D2Hawkeye,MIT15_071S17_Session_4.3.01_300k.mp4,8.6,0,
+4.3-V2,Unit 4: Trees,4.3 Keeping an Eye on Healthcare Costs: The D2Hawkeye Story,2,Claims Data,MIT15_071S17_Session_4.3.03_300k.mp4,8.8,0,
+4.3-V3,Unit 4: Trees,4.3 Keeping an Eye on Healthcare Costs: The D2Hawkeye Story,3,The Variables,MIT15_071S17_Session_4.3.05_300k.mp4,11.4,0,
+4.3-V4,Unit 4: Trees,4.3 Keeping an Eye on Healthcare Costs: The D2Hawkeye Story,4,Error Measures,MIT15_071S17_Session_4.3.07_300k.mp4,5.3,1,penalty|accuracy|error|r.?squared
+4.3-V5,Unit 4: Trees,4.3 Keeping an Eye on Healthcare Costs: The D2Hawkeye Story,5,CART to Predict Cost,MIT15_071S17_Session_4.3.09_300k.mp4,7.8,0,
+4.3-V6,Unit 4: Trees,4.3 Keeping an Eye on Healthcare Costs: The D2Hawkeye Story,6,Claims Data in R,MIT15_071S17_Session_4.3.11_300k.mp4,11.0,0,
+4.3-V7,Unit 4: Trees,4.3 Keeping an Eye on Healthcare Costs: The D2Hawkeye Story,7,Baseline Method and Penalty Matrix,MIT15_071S17_Session_4.3.13_300k.mp4,8.7,1,penalty|baseline|matrix
+4.3-V8,Unit 4: Trees,4.3 Keeping an Eye on Healthcare Costs: The D2Hawkeye Story,8,Predicting Healthcare Cost in R,MIT15_071S17_Session_4.3.15_300k.mp4,17.4,0,
+4.3-V9,Unit 4: Trees,4.3 Keeping an Eye on Healthcare Costs: The D2Hawkeye Story,9,Results,MIT15_071S17_Session_4.3.17_300k.mp4,7.1,0,
+4.4-V1,Unit 4: Trees,"4.4 Location, Location, Location: Regression Trees for Housing Data (Recitation)",1,Boston Housing Data,MIT15_071S17_Session_4.4.02_300k.mp4,10.6,0,
+4.4-V2,Unit 4: Trees,"4.4 Location, Location, Location: Regression Trees for Housing Data (Recitation)",2,The Data,MIT15_071S17_Session_4.4.03_300k.mp4,20.2,0,
+4.4-V3,Unit 4: Trees,"4.4 Location, Location, Location: Regression Trees for Housing Data (Recitation)",3,Geographical Predictions,MIT15_071S17_Session_4.4.04_300k.mp4,11.6,0,
+4.4-V4,Unit 4: Trees,"4.4 Location, Location, Location: Regression Trees for Housing Data (Recitation)",4,Regression Trees,MIT15_071S17_Session_4.4.05_300k.mp4,14.2,1,regression tree|tree|leaf|average
+4.4-V5,Unit 4: Trees,"4.4 Location, Location, Location: Regression Trees for Housing Data (Recitation)",5,Putting it all Together,MIT15_071S17_Session_4.4.06_300k.mp4,14.3,0,
+4.4-V6,Unit 4: Trees,"4.4 Location, Location, Location: Regression Trees for Housing Data (Recitation)",6,The CP Parameter,MIT15_071S17_Session_4.4.07_300k.mp4,5.7,1,cp|complexity|prune|overfit
+4.4-V7,Unit 4: Trees,"4.4 Location, Location, Location: Regression Trees for Housing Data (Recitation)",7,Cross-Validation,MIT15_071S17_Session_4.4.08_300k.mp4,15.1,0,
+5.2-V1,Unit 5: Text Analytics,5.2 Turning Tweets into Knowledge: An Introduction to Text Analytics,1,Twitter,MIT15_071S17_Session_5.2.01_300k.mp4,5.3,0,
+5.2-V2,Unit 5: Text Analytics,5.2 Turning Tweets into Knowledge: An Introduction to Text Analytics,2,Text Analytics,MIT15_071S17_Session_5.2.02_300k.mp4,5.4,1,text|language|sentiment|unstructured
+5.2-V3,Unit 5: Text Analytics,5.2 Turning Tweets into Knowledge: An Introduction to Text Analytics,3,Creating the Dataset,MIT15_071S17_Session_5.2.04_300k.mp4,8.7,1,tweet|mechanical turk|sentiment|rater|label
+5.2-V4,Unit 5: Text Analytics,5.2 Turning Tweets into Knowledge: An Introduction to Text Analytics,4,Bag of Words,MIT15_071S17_Session_5.2.06_300k.mp4,13.5,1,bag of words|stop word|stemming|word
+5.2-V5,Unit 5: Text Analytics,5.2 Turning Tweets into Knowledge: An Introduction to Text Analytics,5,Pre-Processing in R,MIT15_071S17_Session_5.2.08_300k.mp4,17.1,1,corpus|tolower|punctuation|stop|stem
+5.2-V6,Unit 5: Text Analytics,5.2 Turning Tweets into Knowledge: An Introduction to Text Analytics,6,Bag of Words in R,MIT15_071S17_Session_5.2.10_300k.mp4,14.6,0,
+5.2-V7,Unit 5: Text Analytics,5.2 Turning Tweets into Knowledge: An Introduction to Text Analytics,7,Predicting Sentiment,MIT15_071S17_Session_5.2.12_300k.mp4,10.6,0,
+5.2-V8,Unit 5: Text Analytics,5.2 Turning Tweets into Knowledge: An Introduction to Text Analytics,8,Conclusion,MIT15_071S17_Session_5.2.14_300k.mp4,3.5,0,
+5.3-V1,Unit 5: Text Analytics,5.3 Man vs. Machine: How IBM Built a Jeopardy Champion,1,IBM Watson,MIT15_071S17_Session_5.3.01_300k.mp4,11.8,0,
+5.3-V2,Unit 5: Text Analytics,5.3 Man vs. Machine: How IBM Built a Jeopardy Champion,2,The Game of Jeopardy,MIT15_071S17_Session_5.3.03_300k.mp4,6.5,0,
+5.3-V3,Unit 5: Text Analytics,5.3 Man vs. Machine: How IBM Built a Jeopardy Champion,3,Watson's Database and Tools,MIT15_071S17_Session_5.3.05_300k.mp4,6.2,1,database|wikipedia|encyclop|dictionar|hadoop|uima
+5.3-V4,Unit 5: Text Analytics,5.3 Man vs. Machine: How IBM Built a Jeopardy Champion,4,How Watson Works - Steps 1 and 2,MIT15_071S17_Session_5.3.07_300k.mp4,7.2,1,question|analysis|hypothes|candidate|answer
+5.3-V5,Unit 5: Text Analytics,5.3 Man vs. Machine: How IBM Built a Jeopardy Champion,5,How Watson Works - Steps 3 and 4,MIT15_071S17_Session_5.3.09_300k.mp4,11.8,1,scor|rank|confidence|buzz|merg
+5.3-V6,Unit 5: Text Analytics,5.3 Man vs. Machine: How IBM Built a Jeopardy Champion,6,The Results,MIT15_071S17_Session_5.3.11_300k.mp4,18.2,0,
+5.4-V1,Unit 5: Text Analytics,5.4 Predictive Coding: Bringing Text Analytics to the Courtroom (Recitation),1,The Story of Enron,MIT15_071S17_Session_5.4.02_300k.mp4,6.5,0,
+5.4-V2,Unit 5: Text Analytics,5.4 Predictive Coding: Bringing Text Analytics to the Courtroom (Recitation),2,The Data,MIT15_071S17_Session_5.4.03_300k.mp4,8.7,0,
+5.4-V3,Unit 5: Text Analytics,5.4 Predictive Coding: Bringing Text Analytics to the Courtroom (Recitation),3,Pre-Processing,MIT15_071S17_Session_5.4.04_300k.mp4,5.8,1,corpus|lower|punctuation|stop|stem
+5.4-V4,Unit 5: Text Analytics,5.4 Predictive Coding: Bringing Text Analytics to the Courtroom (Recitation),4,Bag of Words,MIT15_071S17_Session_5.4.05_300k.mp4,5.6,0,
+5.4-V5,Unit 5: Text Analytics,5.4 Predictive Coding: Bringing Text Analytics to the Courtroom (Recitation),5,Building Models,MIT15_071S17_Session_5.4.06_300k.mp4,7.2,0,
+5.4-V6,Unit 5: Text Analytics,5.4 Predictive Coding: Bringing Text Analytics to the Courtroom (Recitation),6,Evaluating the Model,MIT15_071S17_Session_5.4.07_300k.mp4,9.9,1,accuracy|confusion|false|baseline|sensitivity
+5.4-V7,Unit 5: Text Analytics,5.4 Predictive Coding: Bringing Text Analytics to the Courtroom (Recitation),7,The ROC Curve,MIT15_071S17_Session_5.4.08_300k.mp4,7.4,1,roc|curve|auc|threshold
+5.4-V8,Unit 5: Text Analytics,5.4 Predictive Coding: Bringing Text Analytics to the Courtroom (Recitation),8,Predictive Coding Today,MIT15_071S17_Session_5.4.09_300k.mp4,2.0,0,

@@ -1,0 +1,13 @@
+# Everything except step 1 (Whisper). Install with:  pip install -r requirements.txt
+numpy>=1.24
+pandas>=1.5
+scikit-learn>=1.2
+requests>=2.28
+matplotlib>=3.6
+streamlit>=1.30
+
+# Step 1 (speech to text) needs ONE of these two. They are big, so they are not listed above:
+#   pip install faster-whisper "av<19"   best without a GPU (up to 4x faster on a CPU, and it needs no ffmpeg).
+#                                        "av<19" because av 19 removed an option that faster-whisper 1.2.1 still uses.
+#   pip install openai-whisper           good with an NVIDIA GPU; also needs ffmpeg (a program, not a pip package)
+# For the tests:  pip install pytest
