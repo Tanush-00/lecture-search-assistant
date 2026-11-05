@@ -1,0 +1,145 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "0  Check setup",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/check_setup.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "1  Download ONE video (asks for the id)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/step0_download_videos.py",
+      "args": ["--only", "${input:videoId}"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "1  Download all chosen videos",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/step0_download_videos.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "2  Transcribe ONE video (asks for the id)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/step1_transcribe.py",
+      "args": ["--only", "${input:videoId}"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "2  Transcribe all downloaded videos",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/step1_transcribe.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "3  Build the index",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/step2_build_index.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "4  Ask a question (asks for it)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/ask.py",
+      "args": ["${input:question}"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "4  Ask a question, keywords only (no Ollama)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/ask.py",
+      "args": ["${input:question}", "--method", "keywords", "--no-llm"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "5  Where do the lectures say it? (word or regex)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/grep_transcripts.py",
+      "args": ["${input:pattern}"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "6  Evaluate the search",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/evaluate.py",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "6  Evaluate and write the results into README.md",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/evaluate.py",
+      "args": ["--write-readme"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "7  Web app (Streamlit)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "streamlit",
+      "args": ["run", "app.py"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Run all tests (pytest)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "args": ["-q"],
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Run the file that is open",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}"
+    }
+  ],
+  "inputs": [
+    {
+      "id": "videoId",
+      "type": "promptString",
+      "description": "Video id from catalog.csv, like 3.2-V5",
+      "default": "3.2-V5"
+    },
+    {
+      "id": "question",
+      "type": "promptString",
+      "description": "Your question about the lectures",
+      "default": "what is an ROC curve?"
+    },
+    {
+      "id": "pattern",
+      "type": "promptString",
+      "description": "A word or a regex to look for in the transcripts, like k-means|clustering",
+      "default": "area under"
+    }
+  ]
+}
