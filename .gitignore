@@ -1,24 +1,27 @@
-name: tests
+# The lecture videos are downloaded by step 0 and stay on your laptop
+videos/
+audios/
+*.mp4
+*.mov
+*.mkv
+*.webm
+*.m4a
+*.mp3
+*.wav
+*.part
 
-# Runs the automatic tests on every push. They need no Ollama, no Whisper and no internet:
-# the slow parts are replaced by small fakes inside the tests.
-on:
-  push:
-  pull_request:
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
 
-jobs:
-  test:
-    runs-on: ubuntu-24.04          # a fixed version, so a new "ubuntu-latest" can never break the tests by surprise
-    strategy:
-      matrix:
-        python-version: ["3.10", "3.12", "3.14"]
-    steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v7
-        with:
-          python-version: ${{ matrix.python-version }}
-          cache: pip
-      - name: Install the packages
-        run: pip install -r requirements.txt pytest
-      - name: Run the tests
-        run: python -m pytest -q
+# Secrets and OS files
+.env
+.streamlit/secrets.toml
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Made from the lectures by steps 1 and 2 (other people's work): rebuilt locally, not uploaded
+transcripts/
+index/
