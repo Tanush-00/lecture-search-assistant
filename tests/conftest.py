@@ -136,6 +136,15 @@ class FakeOllamaHandler(BaseHTTPRequestHandler):
         self.server.requests.append((self.path, request))
         if request.get("model") == "missing-model":
             self._send(404, {"error": "model 'missing-model' not found"})
+        elif self.path == "/api/embed" and self.server.nan_error_when(request["input"]):
+            # what a real Ollama does when bge-m3 calculates NaN for one of the texts
+            self._send(500, {"error": "failed to encode response: json: unsupported value: NaN"})
+        elif self.path == "/api/embed" and self.server.crash_when(request["input"]):
+            self._send(500, {"error": "llama runner process has terminated"})
+        elif self.path == "/api/embed" and self.server.nan_reply_when(request["input"]):
+            vectors = fake_embed(request["input"]).tolist()      # a reply (status 200) in which the numbers are NaN
+            vectors[0][0] = float("nan")
+            self._send(200, {"embeddings": vectors})
         elif self.path == "/api/embed":
             self._send(200, {"embeddings": fake_embed(request["input"]).tolist()})
         elif self.path == "/api/generate":
@@ -155,9 +164,14 @@ class FakeOllamaHandler(BaseHTTPRequestHandler):
 
 @pytest.fixture
 def fake_ollama():
-    """Starts the fake server. Gives (its address, the server); server.requests lists what it received."""
+    """Starts the fake server. Gives (its address, the server); server.requests lists what it received.
+    A test can make the embedding go wrong by replacing these rules (each gets the list of texts of one request):
+      server.nan_error_when  - answer with the 'NaN' error 500 (like the real Ollama and bge-m3 sometimes do),
+      server.crash_when      - answer with another error 500,
+      server.nan_reply_when  - answer 200, but with a NaN inside the numbers."""
     server = HTTPServer(("127.0.0.1", 0), FakeOllamaHandler)
     server.requests = []
+    server.nan_error_when = server.crash_when = server.nan_reply_when = lambda texts: False
     thread = threading.Thread(target=server.serve_forever, daemon=True)
     thread.start()
     yield f"http://127.0.0.1:{server.server_port}", server

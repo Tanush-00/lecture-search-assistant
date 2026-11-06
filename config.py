@@ -36,5 +36,6 @@ EMBED_BATCH_SIZE = 32        # how many chunks are sent to Ollama in one request
 TOP_K = 4                    # how many passages are shown / given to the LLM
 LLM_MODEL = "llama3.2"
 # If the best passage scores below this number, the assistant says "not found in the videos".
-# These are only starting values: run `python evaluate.py` to find the right ones for your videos.
-MIN_SCORE = {"embeddings": 0.40, "keywords": 0.10}
+# Tuned with `python evaluate.py` on the 65 answerable and 24 not-answerable questions in eval/questions.csv
+# (see the README). With other videos or another embedding model, run `python evaluate.py` again for new values.
+MIN_SCORE = {"embeddings": 0.58, "keywords": 0.20}

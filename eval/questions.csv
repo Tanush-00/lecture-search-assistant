@@ -1,4 +1,69 @@
 question,video,answer_start,answer_end
+What are the problems with using the sum of squared errors to judge a model?,2.2-V2,4:54,5:44
+What is a residual in a regression model?,2.2-V2,2:15,2:41
+Which weather variable alone gave the worst R-squared for predicting wine price?,2.2-V3,0:39,1:04
+Does adding more and more variables keep improving the model by the same amount?,2.2-V3,2:46,3:03
+"In R's regression output, what does it mean when a coefficient has three stars?",2.2-V5,2:13,2:41
+Why did age become significant after France population was removed from the wine model?,2.2-V5,5:16,5:51
+At what correlation value should I start to worry about multicollinearity?,2.2-V6,6:46,7:04
+Can R-squared be negative on a test set?,2.2-V7,5:35,6:01
+How many wins did Paul DePodesta think the A's needed to make the playoffs?,2.3-V2,1:07,1:23
+"According to the regression, how many more runs than its opponents must a team score to win 95 games?",2.3-V2,6:24,7:12
+How close was the model's prediction of the 2002 Oakland A's wins to what really happened?,2.3-V4,3:36,3:56
+Why can last season's player statistics be used to predict a team's runs before the new season?,2.3-V4,0:22,0:47
+Why do the playoffs have a sample size problem?,2.3-V5,0:37,1:01
+Is winning more regular season games related to winning the World Series?,2.3-V5,1:18,1:45
+Why does it matter to measure the quality of healthcare?,3.2-V1,1:13,1:42
+What are odds in logistic regression and when are they greater than 1?,3.2-V3,2:43,3:09
+What does a negative coefficient do to the predicted probability in logistic regression?,3.2-V3,1:56,2:30
+"If I have no preference between the two types of errors, which threshold should I use?",3.2-V5,2:03,2:20
+"In the quality-of-care model, what happens to sensitivity and specificity if I raise the threshold from 0.5 to 0.7?",3.2-V5,6:42,7:17
+How do I pick a threshold from the ROC curve when I want a very low false positive rate?,3.2-V6,2:38,2:59
+Is the logistic regression model better than just predicting good care for every patient?,3.2-V7,7:54,8:30
+Who came up with the term risk factor?,3.3-V2,1:50,2:12
+What fraction of the data should go into the training set when I split it?,3.3-V3,2:51,3:22
+How can I use every other variable as a predictor in glm without typing them all out?,3.3-V3,4:08,4:50
+What is the difference between internal validation and external validation?,3.3-V4,0:00,0:46
+How can a model that over-predicts risk for another population be recalibrated?,3.3-V4,2:02,2:33
+Why not just delete the observations that have missing values?,3.4-V2,1:53,2:16
+What is multiple imputation?,3.4-V2,3:05,3:37
+How does the smart baseline based on the Rasmussen poll predict the winner of a state?,3.4-V3,2:08,2:34
+How many mistakes did the smart baseline make compared with the naive baseline?,3.4-V3,5:10,5:35
+Why did the researchers use CART instead of logistic regression to predict Supreme Court decisions?,4.2-V2,3:44,4:15
+"In an R classification tree, does a yes answer go to the left or to the right?",4.2-V2,6:25,6:42
+Why were cases from 1994 to 2001 used to predict the Supreme Court's decisions?,4.2-V2,0:00,0:48
+How can a classification tree give a probability instead of just a class?,4.2-V3,1:32,2:07
+Why can't I just run CART many times to build a forest?,4.2-V5,0:41,1:14
+How many trees do I need in a random forest?,4.2-V5,2:44,3:07
+Why do I get a warning when I build a random forest for a classification problem in R?,4.2-V5,4:54,5:21
+Why shouldn't I pick the parameter value that gives the best accuracy on the test set?,4.2-V6,0:21,0:50
+How does k-fold cross-validation work?,4.2-V6,0:56,1:28
+Why does the healthcare cost model use a penalty error instead of plain accuracy?,4.3-V4,0:18,0:48
+How do I compute the penalty error from a classification matrix in R?,4.3-V7,4:12,4:55
+What does a regression tree predict at its leaves?,4.4-V4,0:45,1:10
+What real-world feature did a split in the Boston regression tree line up with?,4.4-V4,5:03,5:24
+How is the cp parameter related to the penalty lambda?,4.4-V6,2:32,3:10
+How does a penalty on the number of splits change how a regression tree is built?,4.4-V6,0:30,1:04
+Why is natural language processing difficult for computers?,5.2-V2,1:59,2:21
+What is the Turing test?,5.2-V2,1:08,1:28
+What is Amazon Mechanical Turk used for?,5.2-V3,1:45,2:20
+How was a single sentiment score worked out for each tweet?,5.2-V3,3:29,3:47
+What is the bag of words method?,5.2-V4,0:16,0:47
+Why can removing stop words hurt a text model?,5.2-V4,3:11,3:50
+Why is a lookup table of word stems a bad idea for data from the internet?,5.2-V4,4:28,4:53
+Why did we also remove the word Apple when removing stop words from the tweets?,5.2-V5,6:26,6:42
+Why is the game of Jeopardy hard for a computer?,5.3-V3,0:17,0:39
+Why couldn't Watson just search Google for the answers?,5.3-V3,1:35,1:58
+What are the four major steps Watson goes through to answer a question?,5.3-V3,3:38,4:18
+What is the lexical answer type of a question?,5.3-V4,0:16,0:35
+Why does Watson generate so many candidate answers in the hypothesis generation step?,5.3-V4,3:18,3:35
+How does Watson decide when to buzz in?,5.3-V5,0:22,0:42
+Why does Watson merge answers such as Abraham Lincoln and Honest Abe?,5.3-V5,3:42,4:13
+How does Watson work out its overall confidence in each candidate answer?,5.3-V5,4:13,4:58
+How can I print a long text document over several lines in R?,5.4-V3,0:30,0:50
+How do I pull the probability of the positive class out of a CART model's predictions?,5.4-V6,0:34,1:12
+Why does a false negative cost more than a false positive when searching for responsive documents?,5.4-V6,3:18,4:03
+Why was a threshold around 0.15 chosen for the document review model?,5.4-V7,2:11,2:44
 What is K-means clustering?,,,
 How does PCA reduce the number of dimensions?,,,
 What is a convolutional neural network?,,,
@@ -9,3 +74,17 @@ What is a REST API?,,,
 What is the capital of France?,,,
 How do I make chicken biryani?,,,
 What is the best way to learn the guitar?,,,
+What is the Gini index and how does CART use it to choose a split?,,,
+How does gradient boosting build on random forests?,,,
+What is lasso regression and how does it shrink the coefficients?,,,
+How do I use the Hosmer-Lemeshow test to check how well a logistic regression fits?,,,
+How does the Naive Bayes classifier work for text?,,,
+What is TF-IDF weighting?,,,
+How do word embeddings like word2vec represent the meaning of words?,,,
+How does k-nearest neighbours classify a new data point?,,,
+How is the F1 score calculated?,,,
+How do I choose the number of clusters with the elbow method?,,,
+What is the simplex method in linear optimization?,,,
+How do I draw a heat map in ggplot2?,,,
+How does collaborative filtering recommend movies?,,,
+How does a Poisson regression model count data?,,,

@@ -9,8 +9,8 @@ video_id,unit,sequence,video_no,title,archive_file,size_mb,selected,check_regex
 2.2-V8,Unit 2: Linear Regression,2.2 The Statistical Sommelier: An Introduction to Linear Regression,8,Comparing the Model to the Experts,MIT15_071S17_Session_2.2.15_300k.mp4,3.9,0,
 2.3-V1,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,1,The Story of Moneyball,MIT15_071S17_Session_2.3.02_300k.mp4,16.0,0,
 2.3-V2,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,2,Making it to the Playoffs,MIT15_071S17_Session_2.3.03_300k.mp4,11.9,1,playoff|wins|run difference
-2.3-V3,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,3,Predicting Runs,MIT15_071S17_Session_2.3.05_300k.mp4,10.1,1,on.base|slugging|batting average|runs
-2.3-V4,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,4,Using the Models to Make Predictions,MIT15_071S17_Session_2.3.07_300k.mp4,5.5,0,
+2.3-V3,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,3,Predicting Runs,MIT15_071S17_Session_2.3.05_300k.mp4,10.1,0,
+2.3-V4,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,4,Using the Models to Make Predictions,MIT15_071S17_Session_2.3.07_300k.mp4,5.5,1,oakland|predict|runs|wins
 2.3-V5,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,5,Winning the World Series,MIT15_071S17_Session_2.3.09_300k.mp4,2.9,1,world series|playoff|lottery|luck
 2.3-V6,Unit 2: Linear Regression,2.3 Moneyball: The Power of Sports Analytics,6,The Analytics Edge in Sports,MIT15_071S17_Session_2.3.11_300k.mp4,10.2,0,
 2.4-V1,Unit 2: Linear Regression,2.4 Playing Moneyball in the NBA (Recitation),1,The Data,MIT15_071S17_Session_2.4.02_300k.mp4,9.5,0,

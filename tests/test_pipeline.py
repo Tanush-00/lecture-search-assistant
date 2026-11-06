@@ -367,6 +367,45 @@ def test_step2_builds_and_saves_the_index(folders, monkeypatch, transcripts, cap
     assert "chunks" in out and "embedded" in out and "(100%)" in out           # it shows how far it is
 
 
+def test_step2_survives_a_nan_chunk_and_says_which_chunk_was_changed(folders, fake_ollama, monkeypatch, transcripts, capsys):
+    url, server = fake_ollama
+    monkeypatch.setattr(config, "OLLAMA_URL", url)                              # the real embed_texts, the fake server
+    for video, segments in transcripts.items():
+        rag.save_transcript(config.TRANSCRIPT_DIR, video, segments, {})
+    bad = rag.make_chunks(transcripts["01_precision_recall"], 30, 5)[0]["text"]
+    server.nan_error_when = lambda texts: bad in texts                          # Ollama + bge-m3 answer NaN for this chunk
+    assert step2_build_index.main([]) == 0
+    out = capsys.readouterr().out
+    assert "NaN" in out and "for 1 chunk." in out and "chunk 0: video 01_precision_recall at 0:00" in out
+    index = rag.load_index(config.INDEX_DIR)
+    assert index.settings["embed_changed"] == [{"chunk_id": 0, "video": "01_precision_recall", "start": "0:00",
+                                                "change": "added a full stop at the end"}]
+    assert np.isfinite(index.matrix).all() and len(index.matrix) == len(index.chunks) == index.settings["n_chunks"]
+
+
+def test_step2_says_nothing_about_nan_when_everything_worked(folders, fake_ollama, monkeypatch, transcripts, capsys):
+    url, _ = fake_ollama
+    monkeypatch.setattr(config, "OLLAMA_URL", url)
+    for video, segments in transcripts.items():
+        rag.save_transcript(config.TRANSCRIPT_DIR, video, segments, {})
+    assert step2_build_index.main([]) == 0
+    assert "NaN" not in capsys.readouterr().out
+    assert "embed_changed" not in rag.load_index(config.INDEX_DIR).settings
+
+
+def test_step2_stops_with_a_clear_message_when_a_chunk_can_never_be_embedded(folders, fake_ollama, monkeypatch, transcripts,
+                                                                             capsys):
+    url, server = fake_ollama
+    monkeypatch.setattr(config, "OLLAMA_URL", url)
+    for video, segments in transcripts.items():
+        rag.save_transcript(config.TRANSCRIPT_DIR, video, segments, {})
+    server.nan_error_when = lambda texts: any("precision" in t for t in texts)   # every variant still contains the word
+    assert step2_build_index.main([]) == 1
+    out = capsys.readouterr().out
+    assert "Stopped:" in out and "answers NaN" in out and "OLLAMA_FLASH_ATTENTION=false" in out
+    assert not (config.INDEX_DIR / "embeddings.npy").exists()                  # no half-finished index is saved
+
+
 def test_step2_problems_are_explained(folders, monkeypatch, transcripts, capsys):
     assert step2_build_index.main([]) == 1
     assert "Run step1_transcribe.py first" in capsys.readouterr().out
@@ -514,9 +553,14 @@ def test_load_questions_needs_the_right_columns(tmp_path):
         evaluate.load_questions(tmp_path / "missing.csv", DURATIONS)
 
 
-def test_the_starter_questions_file_is_valid_and_all_unanswerable():
-    questions = evaluate.load_questions(ROOT / "eval" / "questions.csv", DURATIONS)
-    assert len(questions) >= 10 and not questions["in_scope"].any()
+def test_the_shipped_questions_file_is_valid():
+    """eval/questions.csv: every row parses, every video it names is a selected video in catalog.csv,
+    and it holds both questions the videos can answer and questions they cannot."""
+    selected = [name for name, row in rag.read_catalog(ROOT / "catalog.csv").items() if row["selected"]]
+    durations = {name: 3600.0 for name in selected}      # the real lengths are not in the catalog, so allow an hour
+    questions = evaluate.load_questions(ROOT / "eval" / "questions.csv", durations)
+    assert len(questions) >= 10
+    assert questions["in_scope"].any() and not questions["in_scope"].all()
 
 
 # ================================================================ evaluate.py: metrics
@@ -794,8 +838,11 @@ def test_evaluate_main_explains_missing_pieces(folders, transcripts, monkeypatch
     assert evaluate.main([], embed_fn=fake_embed) == 1
     assert "questions.csv not found" in capsys.readouterr().out
     config.EVAL_DIR.mkdir()
-    (config.EVAL_DIR / "questions.csv").write_text(
-        (ROOT / "eval" / "questions.csv").read_text(encoding="utf-8"), encoding="utf-8")
+    (config.EVAL_DIR / "questions.csv").write_text(          # a starter file: only questions the videos cannot answer
+        "question,video,answer_start,answer_end\n"
+        "What is the capital of France?,,,\n"
+        "Who won the football world cup in 2018?,,,\n",
+        encoding="utf-8")
     assert evaluate.main([], embed_fn=fake_embed) == 1
     assert "no answerable questions yet" in capsys.readouterr().out
 

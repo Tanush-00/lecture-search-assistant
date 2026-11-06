@@ -302,6 +302,132 @@ def test_missing_model_gives_a_helpful_message(fake_ollama):
         rag.embed_texts(["hello"], model="missing-model", url=url)
 
 
+# ---- Ollama + bge-m3 sometimes calculates NaN ("failed to encode response: json: unsupported value: NaN", error 500)
+# for ONE text and then the whole batch of 32 fails. embed_texts() must not stop the whole index build for that.
+def test_a_nan_batch_is_split_and_every_text_still_gets_its_own_vector(fake_ollama):
+    url, server = fake_ollama
+    server.nan_error_when = lambda texts: len(texts) > 1 and any("poison" in t for t in texts)   # fails only in a batch
+    texts = ["precision and recall", "sql joins poison", "overfitting", "cross validation", "random forest"]
+    notes, problems = [], []
+    vectors = rag.embed_texts(texts, url=url, batch_size=4, log=notes.append, problems=problems)
+    assert np.allclose(vectors, fake_embed(texts), atol=1e-5)               # same vectors, same order
+    assert problems == []                                                   # alone, every text works: nothing was changed
+    assert len(notes) == 1 and "one by one" in notes[0] and "texts 1-4" in notes[0]
+    assert [len(request["input"]) for _, request in server.requests] == [4, 1, 1, 1, 1, 1]   # 4 failed, then singles, then the rest
+
+
+def test_progress_still_counts_every_text_after_a_nan_batch(fake_ollama):
+    url, server = fake_ollama
+    server.nan_error_when = lambda texts: len(texts) > 1 and any("poison" in t for t in texts)
+    seen = []
+    rag.embed_texts(["a one", "b poison", "c three", "d four", "e five"], url=url, batch_size=2, log=lambda note: None,
+                    progress=lambda done, total: seen.append((done, total)))
+    assert seen == [(2, 5), (4, 5), (5, 5)]
+
+
+def test_a_text_that_always_gives_nan_is_embedded_in_a_slightly_changed_form(fake_ollama):
+    url, server = fake_ollama
+    bad = "the model gives poison here every time"
+    server.nan_error_when = lambda texts: bad in texts                      # exactly this text fails, alone or in a batch
+    texts = ["precision and recall", bad, "overfitting"]
+    notes, problems = [], []
+    vectors = rag.embed_texts(texts, url=url, log=notes.append, problems=problems)
+    assert vectors.shape == (3, DIM)
+    assert np.allclose(vectors[0], fake_embed([texts[0]])[0], atol=1e-5)
+    assert np.allclose(vectors[2], fake_embed([texts[2]])[0], atol=1e-5)
+    assert np.allclose(vectors[1], fake_embed([bad])[0], atol=1e-5)         # a full stop does not change the fake vector
+    assert problems == [{"number": 1, "change": "added a full stop at the end"}]
+    assert any("Text 2 of 3" in note and "full stop" in note for note in notes)     # the change is announced, not hidden
+    assert np.allclose(np.linalg.norm(vectors, axis=1), 1.0, atol=1e-5)
+
+
+def test_words_are_dropped_when_a_full_stop_does_not_help(fake_ollama):
+    url, server = fake_ollama
+    words = [f"word{i}" for i in range(19)] + ["poison"]                    # 20 words, the bad one is the last
+    server.nan_error_when = lambda texts: any("poison" in t for t in texts)
+    problems = []
+    vectors = rag.embed_texts([" ".join(words)], url=url, log=lambda note: None, problems=problems)
+    assert problems == [{"number": 0, "change": "dropped the last 2 words"}]
+    assert np.allclose(vectors[0], fake_embed([" ".join(words[:-2])])[0], atol=1e-5)
+
+
+def test_the_first_words_are_dropped_when_the_bad_word_is_at_the_start(fake_ollama):
+    url, server = fake_ollama
+    words = ["poison"] + [f"word{i}" for i in range(19)]
+    server.nan_error_when = lambda texts: any("poison" in t for t in texts)
+    problems = []
+    vectors = rag.embed_texts([" ".join(words)], url=url, log=lambda note: None, problems=problems)
+    assert problems == [{"number": 0, "change": "dropped the first 2 words"}]
+    assert np.allclose(vectors[0], fake_embed([" ".join(words[2:])])[0], atol=1e-5)
+
+
+def test_a_text_that_never_works_gives_a_clear_message_and_nothing_is_skipped(fake_ollama):
+    url, server = fake_ollama
+    server.nan_error_when = lambda texts: any("poison" in t for t in texts)
+    with pytest.raises(rag.OllamaError) as caught:
+        rag.embed_texts(["a fine text", "poison " * 30], url=url, log=lambda note: None)
+    message = str(caught.value)
+    assert "text 2 of 2" in message and "poison poison poison" in message      # which text, and how it starts
+    assert "OLLAMA_FLASH_ATTENTION=false" in message                           # and what to do about it
+
+
+def test_other_ollama_errors_are_not_retried(fake_ollama):
+    url, server = fake_ollama
+    server.crash_when = lambda texts: True
+    with pytest.raises(rag.OllamaError, match="terminated"):
+        rag.embed_texts(["a", "b", "c"], url=url, batch_size=3, log=lambda note: None)
+    assert len(server.requests) == 1                                           # no pointless retries of a real failure
+
+
+def test_a_reply_with_nan_numbers_is_handled_like_the_nan_error(fake_ollama):
+    url, server = fake_ollama
+    server.nan_reply_when = lambda texts: len(texts) > 1                       # another Ollama version: status 200, but NaN inside
+    texts = ["precision and recall", "sql joins", "overfitting"]
+    vectors = rag.embed_texts(texts, url=url, log=lambda note: None)
+    assert np.isfinite(vectors).all()
+    assert np.allclose(vectors, fake_embed(texts), atol=1e-5)
+
+
+def test_text_variants_keep_almost_all_words_and_never_repeat():
+    text = " ".join(f"w{i}" for i in range(40))
+    variants = rag._text_variants(text)
+    assert [what for what, _ in variants] == [
+        "added a full stop at the end", "dropped the last 4 words", "dropped the first 4 words",
+        "dropped the last 10 words", "dropped the first 10 words", "kept only the first 20 words",
+        "kept only the last 20 words"]
+    assert len({version for _, version in variants}) == len(variants)
+    assert all(version != text for _, version in variants)
+    for what, version in variants[1:5]:
+        assert len(version.split()) >= 30                                      # at least 75% of the words stay
+    tiny = rag._text_variants("one two three")                                  # too short to drop anything
+    assert [what for what, _ in tiny] == ["added a full stop at the end"]
+    assert rag._text_variants("") == [("added a full stop at the end", " .")]
+    short = rag._text_variants("a b c d e")                                     # 10% and 25% would both drop 1 word: once only
+    assert [what for what, _ in short] == ["added a full stop at the end", "dropped the last 1 word", "dropped the first 1 word"]
+
+
+def test_build_index_writes_down_the_chunks_that_had_to_be_changed(fake_ollama, transcripts, monkeypatch):
+    url, server = fake_ollama
+    monkeypatch.setattr(config, "OLLAMA_URL", url)
+    bad = rag.make_chunks(transcripts["02_overfitting"], 30, 5)[1]["text"]    # the second chunk of the second video
+    server.nan_error_when = lambda texts: bad in texts
+    index = rag.build_index(transcripts, 30, 5, settings={"embed_model": config.EMBED_MODEL})
+    assert len(index.matrix) == len(index.chunks) and np.isfinite(index.matrix).all()
+    changed = index.settings["embed_changed"]
+    assert len(changed) == 1
+    row = index.chunks[index.chunks["text"] == bad].iloc[0]
+    assert changed[0] == {"chunk_id": int(row["chunk_id"]), "video": "02_overfitting",
+                          "start": rag.format_time(row["start"]), "change": "added a full stop at the end"}
+    assert index.settings["embed_model"] == config.EMBED_MODEL                # the other settings are kept
+
+
+def test_build_index_has_no_changed_list_when_everything_worked(fake_ollama, transcripts, monkeypatch):
+    url, _ = fake_ollama
+    monkeypatch.setattr(config, "OLLAMA_URL", url)
+    index = rag.build_index(transcripts, 30, 5, settings={"embed_model": config.EMBED_MODEL})
+    assert "embed_changed" not in index.settings
+
+
 def test_ollama_not_running_gives_a_helpful_message():
     with pytest.raises(rag.OllamaError, match="Cannot reach Ollama"):
         rag.embed_texts(["hello"], url="http://127.0.0.1:1")

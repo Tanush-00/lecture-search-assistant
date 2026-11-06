@@ -30,6 +30,10 @@ class OllamaError(RuntimeError):
     """Ollama is not running, a model is missing, or it sent an unexpected reply."""
 
 
+class OllamaNaNError(OllamaError):
+    """Ollama calculated 'NaN' (not a number) for a text and so could not send the vector back."""
+
+
 def setup_console():
     """Stop print() from crashing on Windows consoles that cannot show every character."""
     for stream in (sys.stdout, sys.stderr):
@@ -251,7 +255,10 @@ def _ollama_post(path, payload, url=None, timeout=300):
         model = payload.get("model")
         raise OllamaError(f"Ollama does not have the model '{model}'. Download it with:  ollama pull {model}")
     if reply.status_code != 200:
-        raise OllamaError(f"Ollama returned error {reply.status_code}: {reply.text[:200]}")
+        message = f"Ollama returned error {reply.status_code}: {reply.text[:200]}"
+        if reply.status_code == 500 and "NaN" in reply.text:       # "json: unsupported value: NaN", see embed_texts()
+            raise OllamaNaNError(message)
+        raise OllamaError(message)
     try:
         return reply.json()
     except ValueError:
@@ -271,21 +278,100 @@ def progress_printer(what="chunks", steps=10, out=print):
     return show
 
 
-def embed_texts(texts, model=None, url=None, batch_size=None, progress=None):
+NAN_HELP = ("This is a known problem of Ollama with the bge-m3 model (its 'flash attention' can calculate NaN for some "
+            "texts). Update Ollama, or set the environment variable OLLAMA_FLASH_ATTENTION=false, restart Ollama "
+            "and run this step again.")
+
+
+def _count_words(number):
+    return f"{number} word" + ("" if number == 1 else "s")
+
+
+def _text_variants(text):
+    """Slightly changed versions of a text. They are tried one after the other when Ollama cannot embed the text as it
+    is. Returns a list of (what was changed, the changed text). Every version keeps almost all words of the text, so
+    its meaning (and so its vector) stays nearly the same."""
+    words = text.split()
+    variants = [("added a full stop at the end", text.rstrip() + " .")]
+    for fraction in (0.10, 0.25):
+        cut = max(1, round(len(words) * fraction))
+        if len(words) - cut >= 3:                                   # never leave fewer than 3 words
+            variants.append((f"dropped the last {_count_words(cut)}", " ".join(words[:-cut])))
+            variants.append((f"dropped the first {_count_words(cut)}", " ".join(words[cut:])))
+    if len(words) >= 8:
+        half = len(words) // 2
+        variants.append((f"kept only the first {_count_words(half)}", " ".join(words[:half])))
+        variants.append((f"kept only the last {_count_words(len(words) - half)}", " ".join(words[half:])))
+    seen, unique = {text}, []
+    for what, version in variants:
+        if version not in seen:                                     # tiny texts can give the same version twice
+            seen.add(version)
+            unique.append((what, version))
+    return unique
+
+
+def _vectors_in(data):
+    """The embeddings of an Ollama reply as a float32 table. A NaN or a missing number counts as the NaN problem."""
+    if "embeddings" not in data:
+        raise OllamaError("Ollama's reply has no 'embeddings'. Is your Ollama up to date?")
+    try:
+        table = np.array(data["embeddings"], dtype=np.float32)
+    except TypeError:                                               # a null where a number should be
+        raise OllamaNaNError("Ollama sent embeddings with missing numbers.") from None
+    except ValueError:
+        raise OllamaError("Ollama sent embeddings of different lengths.") from None
+    if table.size and table.ndim != 2:
+        raise OllamaError("Ollama's embeddings have an unexpected shape.")
+    if table.size and not np.isfinite(table).all():
+        raise OllamaNaNError("Ollama sent embeddings that contain NaN.")
+    return table
+
+
+def _embed_alone(text, position, total, model, url, problems, log):
+    """Embed ONE text (used after a batch failed with NaN). If Ollama still answers NaN, slightly changed versions of
+    the text are tried. Returns the vector. A text that had to be changed is announced with log() and added to problems."""
+    for what, version in [(None, text)] + _text_variants(text):
+        try:
+            table = _vectors_in(_ollama_post("/api/embed", {"model": model, "input": [version]}, url=url))
+        except OllamaNaNError:
+            continue
+        if len(table) != 1:
+            raise OllamaError(f"Asked for 1 embedding but got {len(table)}.")
+        if what:
+            log(f"  Text {position + 1} of {total}: Ollama answered NaN for it. I {what} and then it worked.")
+            if problems is not None:
+                problems.append({"number": position, "change": what})
+        return table[0]
+    snippet = " ".join(text.split())[:80]
+    raise OllamaError(f"Ollama cannot embed text {position + 1} of {total}: it answers NaN, even after small changes "
+                      f"to the text. The text starts: \"{snippet}\". {NAN_HELP}")
+
+
+def embed_texts(texts, model=None, url=None, batch_size=None, progress=None, problems=None, log=print):
     """Turn texts into vectors (numbers) with Ollama. Returns a (number of texts, dimensions) array.
 
     Every vector is scaled to length 1, so cosine similarity becomes a simple dot product.
     progress(done, total), if given, is called after every batch: embedding hundreds of chunks on a CPU takes minutes.
+
+    Ollama sometimes cannot embed a text: it calculates NaN (not a number) and answers the WHOLE batch with error 500.
+    Then the texts of that batch are sent one by one. If one text still fails, slightly changed versions of it are
+    tried (_text_variants). A text that had to be changed is announced with log() and, if `problems` is a list,
+    added to it as {"number": position in texts, "change": what was changed}. If nothing works, an OllamaError
+    names the text, so nothing is skipped silently.
     """
     model = model or config.EMBED_MODEL
     batch_size = batch_size or config.EMBED_BATCH_SIZE
     texts = list(texts)
     vectors = []
     for start in range(0, len(texts), batch_size):
-        data = _ollama_post("/api/embed", {"model": model, "input": texts[start:start + batch_size]}, url=url)
-        if "embeddings" not in data:
-            raise OllamaError("Ollama's reply has no 'embeddings'. Is your Ollama up to date?")
-        vectors.extend(data["embeddings"])
+        batch = texts[start:start + batch_size]
+        try:
+            found = list(_vectors_in(_ollama_post("/api/embed", {"model": model, "input": batch}, url=url)))
+        except OllamaNaNError:
+            log(f"  Ollama answered NaN for texts {start + 1}-{start + len(batch)}. Sending them one by one ...")
+            found = [_embed_alone(text, start + offset, len(texts), model, url, problems, log)
+                     for offset, text in enumerate(batch)]
+        vectors.extend(found)
         if progress:
             progress(min(start + batch_size, len(texts)), len(texts))
     if len(vectors) != len(texts):
@@ -329,20 +415,30 @@ def has_model(model_names, wanted):
 # ----------------------------------------------------------------------------
 def build_index(transcripts, chunk_seconds=None, overlap_seconds=None, embed_fn=None, settings=None, progress=None):
     """transcripts = {video: segments}  ->  Index(chunks table, embeddings matrix, settings).
-    progress(done, total) is passed on to the embedding function, which should call it after every batch."""
+    progress(done, total) is passed on to the embedding function, which should call it after every batch.
+    If Ollama could only embed some chunks in a slightly changed form (see embed_texts), they are listed in
+    settings["embed_changed"], so the change is never hidden."""
     rows = []
     for video_id in sorted(transcripts):
         for chunk in make_chunks(transcripts[video_id], chunk_seconds, overlap_seconds):
             rows.append({"video": video_id, **chunk})
     chunks = pd.DataFrame(rows, columns=["video", "start", "end", "text"])
     chunks.insert(0, "chunk_id", range(len(chunks)))
+    settings = dict(settings or {})
     if len(chunks) == 0:
         matrix = np.zeros((0, 0), dtype=np.float32)
     else:
         embed = embed_fn or embed_texts
-        texts = chunks["text"].tolist()
-        matrix = embed(texts, progress=progress) if progress else embed(texts)
-    return Index(chunks, matrix, dict(settings or {}))
+        options = {"progress": progress} if progress else {}
+        problems = []
+        if embed_fn is None:
+            options["problems"] = problems                 # only the real embedder (embed_texts) reports these
+        matrix = embed(chunks["text"].tolist(), **options)
+        if problems:                                       # chunks that Ollama could only embed in a slightly changed form
+            settings["embed_changed"] = [
+                {"chunk_id": int(p["number"]), "video": str(chunks.at[p["number"], "video"]),
+                 "start": format_time(chunks.at[p["number"], "start"]), "change": p["change"]} for p in problems]
+    return Index(chunks, matrix, settings)
 
 
 def save_index(folder, index):

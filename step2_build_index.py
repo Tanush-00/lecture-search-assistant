@@ -50,6 +50,13 @@ def main(argv=None):
           f"(shortest {lengths.min():.0f} s, longest {lengths.max():.0f} s), "
           f"{index.matrix.shape[1]} numbers per chunk.")
     print(f"Saved to {config.INDEX_DIR}")
+    changed = index.settings.get("embed_changed", [])
+    if changed:                              # never hide it: these chunks were embedded in a slightly changed form
+        print(f"\nNOTE: Ollama answered NaN (not a number) for {len(changed)} chunk{'' if len(changed) == 1 else 's'}. "
+              "Each of them was embedded in a slightly changed form; all other chunks are exactly as written:")
+        for item in changed:
+            print(f"    chunk {item['chunk_id']}: video {item['video']} at {item['start']}: {item['change']}")
+        print("  (the list is also saved in index/settings.json under \"embed_changed\")")
     print("Next:  python ask.py \"what is an ROC curve?\"   or   streamlit run app.py")
     return 0
 
